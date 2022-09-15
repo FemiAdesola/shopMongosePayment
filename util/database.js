@@ -1,12 +1,21 @@
 'use strict';
 
-const mysql = require('mysql2');
+const Sequelize = require('sequelize');
 
-// For runing more query at the same time
-const pool = mysql.createPool({
+const sequelize = new Sequelize('node_complete', 'root', 'oyin090577', {
+    dialect: 'mysql',
     host: 'localhost',
-    user: 'root',
-    database: 'node_complete',
-    // password: 'oyin090577'
-});
-module.exports = pool.promise();
+})
+
+module.exports = sequelize;
+
+// const mysql = require('mysql2');
+
+// // For runing more query at the same time
+// const pool = mysql.createPool({
+//     host: 'localhost',
+//     user: 'root',
+//     database: 'node_complete',
+//     // password: '********'
+// });
+// module.exports = pool.promise();
