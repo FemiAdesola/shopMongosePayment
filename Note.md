@@ -1,0 +1,1 @@
+Sequelize is Object relational mapping library
