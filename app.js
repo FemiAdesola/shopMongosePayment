@@ -12,7 +12,6 @@ const errorController = require('./controllers/error')
 // for database
 // const db = require('./util/database');
 const sequelize = require('./util/database');
-
 // from express
 const app = express();
 
@@ -39,7 +38,7 @@ app.use(errorController.get404);
 // this function create appropriate table
 sequelize.sync()
     .then(result => {
-        // console.log(result);
+        console.log(result);
         app.listen(3000)
     })
     .catch(error => {
