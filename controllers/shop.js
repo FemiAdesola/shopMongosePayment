@@ -19,17 +19,25 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
     // for get one  product
     const prodId = req.params.productId;
-    Product.findById(prodId)
-        .then(([productD]) => {
+    // Product.findAll({ where: { id: prodId } })
+    // .then(productD => {
+    //         res.render('shop/productDetail', {
+    //             product: productD[0],
+    //             pageTitle: productD[0].title,
+    //             path: '/products'
+    //         });
+    //     })
+    //     .catch(error => console.log(error))
+    
+    Product.findByPk(prodId)
+        .then(productD => {
             res.render('shop/productDetail', {
-                product: productD[0],
+                product: productD,
                 pageTitle: productD.title,
                 path: '/products'
             });
         })
         .catch(error => console.log(error))
-       
-    // res.redirect('/');
 };
 
 
