@@ -4,10 +4,10 @@ const Cart = require('../models/cart')
 
 exports.getProducts = (req, res, next) => {
     // for get all products without repeart the product
-    Product.fetchAll()
-     .then(([rows, fieldData]) => {
+    Product.findAll()
+     .then((products) => {
             res.render('shop/productList', {
-            prod: rows,
+            prod: products,
             pageTitle: 'All Product Items',
             path: '/products',
         });
@@ -34,16 +34,15 @@ exports.getProduct = (req, res, next) => {
 
 
 exports.getIndex = (req, res, next) => {
-    Product.fetchAll()
-        .then(([rows, fieldData]) => {
-            res.render('shop/index', {
-                prod: rows,
+    Product.findAll()
+        .then(products => {
+             res.render('shop/index', {
+                prod: products,
                 pageTitle: 'Shop',
                 path: '/',
             });
         })
-        .catch(error =>
-            console.log(error));
+        .catch(error => console.log(error));
 };
 
 exports.getCart = (req, res, next) => {
