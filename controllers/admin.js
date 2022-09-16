@@ -18,11 +18,13 @@ exports.postAddProduct = (req, res, next) => {
     const description = req.body.description;
 
     // for database sequ...
-    Product.create({
+    
+  req.user.createProduct({
         title: title,
         imageUrl: imageUrl,
         price: price,
-        description: description
+        description: description,
+        userId:req.user.id
     })
     .then(result => {
         // console.log(result);
@@ -39,8 +41,10 @@ exports.getEditProduct = (req, res, next) => {
     };
     // ProductId is the name we use in admin routes (router.get('/edit-product/:productId')
     const prodId = req.params.productId;
-    Product.findByPk(prodId)
-        .then(prodEdit => {
+    // Product.findByPk(prodId)
+    req.user.getProducts({where:{id:prodId}})
+        .then(prodToBeEdit => {
+            const prodEdit=prodToBeEdit[0]
             if (!prodEdit) {
                 return res.redirect('/')
             }
@@ -78,7 +82,8 @@ exports.postEditProduct = (req, res, next)=>{
 
 
 exports.getProducts = (req, res, next) => {
-     Product.findAll()
+    //  Product.findAll()
+    req.user.getProducts()
      .then((products) => {
             res.render('admin/products', {
             prod: products,
