@@ -38,17 +38,19 @@ exports.getEditProduct = (req, res, next) => {
     };
     // ProductId is the name we use in admin routes (router.get('/edit-product/:productId')
     const prodId = req.params.productId;
-    Product.findById(prodId, prodEdit => {
-        if (!prodEdit) {
-            return res.redirect('/')
-        }
-        res.render('admin/editProduct', {
-            pageTitle: 'Edit Product',
-            path: '/admin/edit-product',
-            editing: editMode,
-            product: prodEdit
-        });
-    }); 
+    Product.findByPk(prodId)
+        .then(prodEdit => {
+            if (!prodEdit) {
+                return res.redirect('/')
+            }
+            res.render('admin/editProduct', {
+                pageTitle: 'Edit Product',
+                path: '/admin/edit-product',
+                editing: editMode,
+                product: prodEdit
+            });
+        })
+        .catch(error=>console.log(error)); 
 };
 
 exports.postEditProduct = (req, res, next)=>{
@@ -57,15 +59,20 @@ exports.postEditProduct = (req, res, next)=>{
     const updatedImageUrl = req.body.imageUrl;
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
-    const updatedProduct = new Product(
-        prodId,
-        updatedTitle,
-        updatedImageUrl,
-        updatedPrice,
-        updatedDescription
-    );
-    updatedProduct.save();
-    res.redirect('/admin/products');
+    Product.findByPk(prodId)
+        .then( updatedProduct => {
+            updatedProduct.title = updatedTitle;
+            updatedProduct.imageUrl= updatedImageUrl;
+            updatedProduct.price= updatedPrice;
+            updatedProduct.description = updatedDescription;
+            return updatedProduct.save();
+        })
+        .then(result => {
+            console.log('UPDATED PRODUCT');
+            res.redirect('/admin/products');
+        })
+        .catch(error => console.log(error));
+    
 };
 
 
