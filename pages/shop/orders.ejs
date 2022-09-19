@@ -2,7 +2,27 @@
 </head>
 <body>
     <%- include('../includes/nav.ejs') %>
-       <main>
-            <h1>Nothing there!</h1>
-       </main>
+   <main>
+      <%  if (orders.length <= 0) { %>
+         <h1>Nothing there!</h1>
+      <% } else { %>
+         <ul class="cart__item-list">
+            <% orders.forEach(orderData => { %>
+               <li class="cart__item">
+                  <h1># <%= orderData.id %></h1>
+                  <ul class="cart__item-list">
+                     <% orderData.products.forEach(item => { %>
+                        <hr>
+                        <li class="cart__item">
+                           <h1> <%= item.title %></h1>
+                           <h2>Quantity: <%= item.orderItem.quantity %></h2>
+                        </li>
+                     <% }) %>
+                  </ul>
+               </li>
+            <% }) %>
+         </ul>
+      <% } %>
+   </main>
     <%- include('../includes/body.ejs') %>
+    
