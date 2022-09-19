@@ -1,6 +1,7 @@
 'use strict';
 const Product = require('../models/product');
-const Cart = require('../models/cart')
+// const Cart = require('../models/cart');
+const Order = require('../models/order');
 
 exports.getProducts = (req, res, next) => {
     // for get all products without repeart the product
@@ -54,7 +55,7 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-    console.log(req.user.cart)
+    // console.log(req.user.cart)
     req.user.getCart()
         .then(cart => {
             return cart.getProducts()
@@ -118,6 +119,31 @@ exports.postCartDeleteProduct = (req, res, next) => {
         .then(result => {
         res.redirect('/cart');
     })
+};
+
+exports.postOrder = (req, res, next) => {
+    req.user
+        .getCart()
+        .then(ordercart => {
+            return ordercart.getProducts();
+        })
+        .then(products => {
+            return req.user
+                .createOrder()
+                .then(order => {
+                    return order.addProducts(products.map(
+                        product => {
+                            product.orderItem = { quantity: product.cartItem.quantity }
+                            return product;
+                        })
+                    );
+                })
+                .then(result => {
+                    res.redirect('/orders')
+                })
+                .catch(error => console.log(error));
+        })
+        .catch(error => console.log(error));
 };
 
 exports.getOrders = (req, res, next) => {
