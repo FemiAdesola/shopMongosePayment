@@ -73,11 +73,42 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
     // productId is the name use in productDetail input under form 
     const prodId = req.body.productId;
-    Product.findById(prodId, (product) => {
-        Cart.addProduct(prodId,product.price)
-    });
+    // Product.findById(prodId, (product) => {
+    //     Cart.addProduct(prodId,product.price)
+    // });
+    let fetchedCart;
+    req.user.getCart()
+        .then(cart => {
+            fetchedCart = cart;
+            return cart.getProducts({
+                where: { id: prodId }
+            });
+        })
+        .then(products => {
+            let productPost;
+            if (products.length > 0) {
+                productPost = products[0]
+            }
+            let newQuantity = 1;
+            if (productPost) {
+                //...
+            }
+            return Product.findByPk(prodId)
+                .then(productPost => {
+                    return fetchedCart.addProduct(productPost, {
+                        through: { quantity: newQuantity }
+                    })
+                })
+                .catch(error => console.log(error));
+            
+        })
+        .then(() => {
+           res.redirect('/cart')
+        })
+        .catch(error => console.log(error));
+    
     console.log(prodId)
-    res.redirect('/cart')
+    
 };
 
 exports.postCartDeleteProduct = (req, res, next) => {
