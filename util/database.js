@@ -1,21 +1,17 @@
 'use strict';
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 
-const Sequelize = require('sequelize');
+const mongoConnect = (cbData) => {
+    MongoClient.connect('mongodb+srv://Femi:oyin090577@cluster0.inmteyr.mongodb.net/?retryWrites=true&w=majority')
+    .then(result => {
+        console.log('Connected');
+        cbData(result)
+    })
+    .catch(error => {
+        console.log(error)
+    });
 
-const sequelize = new Sequelize('node_complete', 'root', '', {
-    dialect: 'mysql',
-    host: 'localhost',
-});
+}
 
-module.exports = sequelize;
-
-// const mysql = require('mysql2');
-
-// // For runing more query at the same time
-// const pool = mysql.createPool({
-//     host: 'localhost',
-//     user: 'root',
-//     database: 'node_complete',
-//     // password: '********'
-// });
-// module.exports = pool.promise();
+module.exports = mongoConnect;
