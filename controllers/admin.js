@@ -1,8 +1,4 @@
 'use strict';
-// from mongodb
-const mongodb = require('mongodb');
-const ObjectId = mongodb.ObjectId;
-
 const Product = require('../models/product');
 
 
@@ -68,7 +64,7 @@ exports.postEditProduct = (req, res, next)=>{
         updatedImageUrl,
         updatedPrice,
         updatedDescription,
-        new ObjectId(prodId)
+        prodId
     )
     productUpdate
         .save()
