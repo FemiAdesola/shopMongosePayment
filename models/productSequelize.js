@@ -1,20 +1,8 @@
 'use strict';
 
-const mongoConnect = require('../util/database')
+const Sequelize = require('sequelize');
 
-class Product {
-    constructor(id, title, imageUrl, price, description) {
-        this.id = id;
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.price = price;
-        this.description = description;
-    }
-    save() {
-        
-    }
-}
-
+const sequelize = require('../util/database');
 const Product = sequelize.define('product', {
     id: {
         type: Sequelize.INTEGER,
