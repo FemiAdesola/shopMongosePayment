@@ -11,6 +11,9 @@ const errorController = require('./controllers/error');
 // for database
 const mongoConnect = require('./util/database.js').mongoConnect;
 
+// User
+const User = require('./models/user');
+
 // from express
 const app = express();
 
@@ -23,13 +26,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // for user
 app.use((req, res, next) => {
-    // User.findById(1)
-    //     .then(user => {
-    //         req.user = user;
-    //         next();
-    //     })
-    //     .catch(error =>console.log(error));
-    next();
+    User.findById("6329c064a48011b1de7afb91")
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(error =>console.log(error));
 })
 
 app.use('/admin', adminRoutes);
