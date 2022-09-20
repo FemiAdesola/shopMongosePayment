@@ -91,16 +91,13 @@ exports.getProducts = (req, res, next) => {
         });
 };
 
-// exports.postDeleteProduct = (req, res, next) => {
-//     // productDeleteId from delete section in admin product.ejs 
-//     const prodDeleteId = req.body.productDeleteId;
-//     Product.findByPk(prodDeleteId)
-//         .then(productToBeDelete => {
-//             return productToBeDelete.destroy();
-//         })
-//         .then(result => {
-//             console.log('PRODUCT DELETED');
-//             res.redirect('/admin/products');
-//         })
-//         .catch(error=> console.log(error));
-// };
+exports.postDeleteProduct = (req, res, next) => {
+    // productDeleteId from delete section in admin product.ejs 
+    const prodDeleteId = req.body.productDeleteId;
+    Product.deleteById(prodDeleteId)
+        .then(() => {
+            console.log('PRODUCT DELETED');
+            res.redirect('/admin/products');
+        })
+        .catch(error=> console.log(error));
+};

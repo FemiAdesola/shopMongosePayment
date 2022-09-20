@@ -59,6 +59,22 @@ class Product {
             });
         
     };
+
+    // delete method
+    static deleteById(id) {
+         const db = getDb();
+        return db
+            .collection('products')
+            .deleteOne({
+                _id: new mongodb.ObjectId(id)
+            })
+            .then(result => {
+                console.log('Deleted')
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
 }
 
 
