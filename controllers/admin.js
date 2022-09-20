@@ -1,5 +1,10 @@
 'use strict';
+// from mongodb
+const mongodb = require('mongodb');
+const ObjectId = mongodb.ObjectId;
+
 const Product = require('../models/product');
+
 
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/editProduct', {
@@ -58,14 +63,15 @@ exports.postEditProduct = (req, res, next)=>{
     const updatedImageUrl = req.body.imageUrl;
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
-    Product.findByPk(prodId)
-        .then( updatedProduct => {
-            updatedProduct.title = updatedTitle;
-            updatedProduct.imageUrl= updatedImageUrl;
-            updatedProduct.price= updatedPrice;
-            updatedProduct.description = updatedDescription;
-            return updatedProduct.save();
-        })
+    const productUpdate = new Product(
+        updatedTitle,
+        updatedImageUrl,
+        updatedPrice,
+        updatedDescription,
+        new ObjectId(prodId)
+    )
+    productUpdate
+        .save()
         .then(result => {
             console.log('UPDATED PRODUCT');
             res.redirect('/admin/products');

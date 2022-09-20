@@ -11,16 +11,24 @@ class Product {
         this._id = id;
     }
     save() {
-        
         const db = getDb();
-        return db
-            .collection('products')
+        let dbOperation;
+        if (this._id) {
+            // update the product 
+            dbOperation = db
+                .collection('products')
+                .updateOne({_id: new mongodb.ObjectId(this._id)}, {$set: this})
+        } else {
+           dbOperation = db.collection('products')
             .insertOne(this)
+        }
+        return dbOperation
             .then(result => {
                 console.log(result);
             })
             .catch(error => console.log(error));
     }
+
     static fetchAll() {
         const db = getDb();
         return db
