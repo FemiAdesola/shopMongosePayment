@@ -1,11 +1,11 @@
 'use strict';
 const Product = require('../models/product');
 // const Cart = require('../models/cart');
-const Order = require('../models/order');
+// const Order = require('../models/order');
 
 exports.getProducts = (req, res, next) => {
     // for get all products without repeart the product
-    Product.findAll()
+    Product.fetchAll()
      .then((products) => {
             res.render('shop/productList', {
             prod: products,
@@ -30,7 +30,7 @@ exports.getProduct = (req, res, next) => {
     //     })
     //     .catch(error => console.log(error))
     
-    Product.findByPk(prodId)
+    Product.findById(prodId)
         .then(productD => {
             res.render('shop/productDetail', {
                 product: productD,
@@ -43,7 +43,7 @@ exports.getProduct = (req, res, next) => {
 
 
 exports.getIndex = (req, res, next) => {
-    Product.findAll()
+    Product.fetchAll()
         .then(products => {
              res.render('shop/index', {
                 prod: products,
