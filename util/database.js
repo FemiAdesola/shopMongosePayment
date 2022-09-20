@@ -2,12 +2,12 @@
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
 
-let db;
+let _db;
 const mongoConnect = (cbData) => {
-    
+    MongoClient.connect('mongodb+srv://Femi:CwRbXZuHSUaMW9yH@shop.fftoabl.mongodb.net/shop?retryWrites=true&w=majority')
         .then(result => {
             console.log('Connected');
-            db = result.db();
+            _db = result.db();
             cbData()
         })
         .catch(error => {
@@ -17,8 +17,8 @@ const mongoConnect = (cbData) => {
 };
 
 const getDb = () => {
-    if (db) {
-        return db
+    if (_db) {
+        return _db;
     }
     throw 'No database found'
 }

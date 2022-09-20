@@ -6,10 +6,10 @@ const path = require('path');
 
 const adminRoutes = require('./routes/admin');
 // const shopRoutes = require('./routes/shop');
-// const errorController = require('./controllers/error');
+const errorController = require('./controllers/error');
 
 // for database
-const mongoConnect = require('./util/database.js');
+const mongoConnect = require('./util/database.js').mongoConnect;
 
 // from express
 const app = express();
@@ -25,15 +25,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
     // User.findById(1)
     //     .then(user => {
-    //         req.user = user; 
+    //         req.user = user;
     //         next();
     //     })
     //     .catch(error =>console.log(error));
+    next();
 })
 
 app.use('/admin', adminRoutes);
 // app.use(shopRoutes);
-// app.use(errorController.get404);
+app.use(errorController.get404);
 
 mongoConnect(() => {
     app.listen(3000);
