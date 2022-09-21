@@ -34,7 +34,7 @@ exports.postAddProduct = (req, res, next) => {
     .catch(error => (console.log(error)));
 };
 
-
+// edit product
 exports.getEditProduct = (req, res, next) => {
     const editMode = req.query.edit;
     if (!editMode) {
@@ -43,7 +43,6 @@ exports.getEditProduct = (req, res, next) => {
     // ProductId is the name we use in admin routes (router.get('/edit-product/:productId')
     const prodId = req.params.productId;
     Product.findById(prodId)
-    
         .then(prodEdit => {
             if (!prodEdit) {
                 return res.redirect('/')
@@ -58,32 +57,32 @@ exports.getEditProduct = (req, res, next) => {
         .catch(error=>console.log(error)); 
 };
 
+// edit post product 
 exports.postEditProduct = (req, res, next)=>{
     const prodId = req.body.productID;
     const updatedTitle = req.body.title;
     const updatedImageUrl = req.body.imageUrl;
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
-    const productUpdate = new Product(
-        updatedTitle,
-        updatedImageUrl,
-        updatedPrice,
-        updatedDescription,
-        prodId
-    )
-    productUpdate
-        .save()
+    
+    Product.findById(prodId)
+        .then(productUpdate => {
+            productUpdate.title = updatedTitle;
+            productUpdate.imageUrl=updatedImageUrl;
+            productUpdate.price = updatedPrice;
+            productUpdate.description = updatedDescription;
+            return productUpdate.save()  
+        })
         .then(result => {
             console.log('UPDATED PRODUCT');
             res.redirect('/admin/products');
         })
         .catch(error => console.log(error));
-    
 };
 
-
+// get the product
 exports.getProducts = (req, res, next) => {
-    Product.fetchAll()
+    Product.find()
         .then((products) => {
             res.render('admin/products', {
             prod: products,
@@ -96,6 +95,8 @@ exports.getProducts = (req, res, next) => {
         });
 };
 
+
+// delete the product
 exports.postDeleteProduct = (req, res, next) => {
     // productDeleteId from delete section in admin product.ejs 
     const prodDeleteId = req.body.productDeleteId;
