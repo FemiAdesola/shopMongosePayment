@@ -119,15 +119,17 @@ exports.postOrder = (req, res, next) => {
 
 // get orders
 exports.getOrders = (req, res, next) => {
-    req.user.getOrders()
-        .then(orders => {
-            res.render('shop/orders', {
-                path: '/orders',
-                pageTitle: 'Your Order',
-                orders:orders
-            });
-        })
-        .catch(error => console.log(error));
+    Order.find({
+        ' user.userId': req.user._id
+    })
+    .then(orders => {
+        res.render('shop/orders', {
+            path: '/orders',
+            pageTitle: 'Your Order',
+            orders: orders
+        });
+    })
+    .catch(error => console.log(error));
 };
 
 exports.getCheckout = (req, res, next) => {
