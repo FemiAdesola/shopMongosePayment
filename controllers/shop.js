@@ -47,12 +47,13 @@ exports.getIndex = (req, res, next) => {
 exports.getCart = (req, res, next) => {
     // console.log(req.user.cart)
     req.user
-        .getCart()
-        .then(cartProducts => {
+        .populate('cart.items.productId')
+        .then(userCartProducts => {
+            const productsByUser = userCartProducts.cart.items;
             res.render('shop/cart', {
                 path: '/cart',
                 pageTitle: 'Your Cart',
-                products: cartProducts
+                products:  productsByUser
             });
         })
         .catch(error => console.log(error)); 
