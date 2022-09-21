@@ -96,31 +96,11 @@ exports.postCartDeleteProduct = (req, res, next) => {
 exports.postOrder = (req, res, next) => {
     let fetchedCartOrdered;
     req.user
-        .getCart()
-        .then(ordercart => {
-            fetchedCartOrdered = ordercart;
-            return ordercart.getProducts();
+        .addOrder()
+        .then(result => {
+            res.redirect('/orders')
         })
-        .then(productsOrdered => {
-            return req.user
-                .createOrder()
-                .then(order => {
-                    return order.addProducts(productsOrdered.map(
-                        product => {
-                            product.orderItem = { quantity: product.cartItem.quantity }
-                            return product;
-                        })
-                    );
-                })
-                .then(result => {
-                    fetchedCartOrdered.setProducts(null);
-                })
-                .then(result => {
-                    res.redirect('/orders')
-                })
-                .catch(error => console.log(error));
-        })
-        .catch(error => console.log(error));
+        .catch(error => console.log(error));  
 };
 
 exports.getOrders = (req, res, next) => {
