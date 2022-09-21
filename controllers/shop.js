@@ -4,8 +4,8 @@ const Product = require('../models/product');
 // const Order = require('../models/order');
 
 exports.getProducts = (req, res, next) => {
-    // for get all products without repeart the product
-    Product.fetchAll()
+    // for get all products without repeat the product
+    Product.find()
      .then((products) => {
             res.render('shop/productList', {
             prod: products,
@@ -20,16 +20,6 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
     // for get one  product
     const prodId = req.params.productId;
-    // Product.findAll({ where: { id: prodId } })
-    // .then(productD => {
-    //         res.render('shop/productDetail', {
-    //             product: productD[0],
-    //             pageTitle: productD[0].title,
-    //             path: '/products'
-    //         });
-    //     })
-    //     .catch(error => console.log(error))
-    
     Product.findById(prodId)
         .then(productD => {
             res.render('shop/productDetail', {
@@ -43,7 +33,7 @@ exports.getProduct = (req, res, next) => {
 
 
 exports.getIndex = (req, res, next) => {
-    Product.fetchAll()
+    Product.find()
         .then(products => {
              res.render('shop/index', {
                 prod: products,
