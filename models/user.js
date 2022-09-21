@@ -92,11 +92,23 @@ class User  {
         
     };
 
-//  get order method
+//  post order method
     addOrder() {
         const db = getDb();
-        return db.collection('orders')
-            .insertOne(this.cart)
+        return this.getCart()
+            .then(productsordered => {
+                const orderProducts = {
+                    items: productsordered,
+                    user: {
+                        _id: new ObjectId(this._id),
+                        name: this.name,
+                        email: this.email,
+                    }
+                };
+                return db
+                    .collection('orders')
+                    .insertOne(orderProducts)
+            })
             .then(result => {
                 this.cart = { items: [] };
                 return db
@@ -108,10 +120,15 @@ class User  {
                     
             })
             .catch(error => {
-                        console.log(error);
-        })
+                console.log(error);
+            });
     }
 
+//  get order method
+    getOrders() {
+        const db = getDb();
+        // return db.collection('orders')
+    }
 
     // delete proudct from cart 
     deleteItemFromCart(productIdDeleted) {
