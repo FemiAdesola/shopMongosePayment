@@ -9,13 +9,16 @@
          <ul class="cart__item-list">
             <% orders.forEach(orderData => { %>
                <li class="cart__item">
-                  <h1># <%= orderData.id %></h1>
+                 <div>
+                   <h1>Order Number: <%= orderData._id %></h1>
+                  <h1>Ordered By: <%= orderData.user.name %></h1>
+                 </div>
                   <ul class="cart__item-list">
-                     <% orderData.products.forEach(item => { %>
-                        <hr>
-                        <li class="cart__item">
-                           <h1> <%= item.title %></h1>
-                           <h2>Quantity: <%= item.orderItem.quantity %></h2>
+                     <% orderData.items.forEach(item => { %>
+                   
+                        <li class="cart__item_in">
+                           <h1>Product: <%= item.title %></h1>
+                           <h2>Quantity: <%= item.quantity %></h2>
                         </li>
                      <% }) %>
                   </ul>

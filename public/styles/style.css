@@ -284,7 +284,15 @@ button:hover{
   padding: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
-
+.cart__item_in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  margin: 7px;
+  border: 1px solid #464f4e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+}
 .cart__item h1,
 .cart__item h2 {
   margin-right: 1rem;
