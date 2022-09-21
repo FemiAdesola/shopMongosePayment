@@ -90,6 +90,27 @@ class User  {
                 console.log(error)
             });
         
+    };
+
+
+    // delete proudct from cart 
+    deleteItemFromCart(productIdDeleted) {
+        // const updatedCartItems = [...this.cart.items]; or
+        const updatedCartItems = this.cart.items.filter(item => {
+            return item.productId.toString() !== productIdDeleted.toString();
+        });
+        const db = getDb();
+        return db.collection('users')
+            .updateOne(
+                { _id: new ObjectId(this._id) },
+                {$set: {cart:{items:updatedCartItems}}}
+            )
+            .then(userCart => {
+                return userCart;
+            })
+            .catch(error => {
+                console.log(error)
+            });
     }
 };
 

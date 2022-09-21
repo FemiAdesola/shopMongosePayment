@@ -77,55 +77,20 @@ exports.postCart = (req, res, next) => {
         })
         .then(result => {
             console.log(result)
-             res.redirect('/cart')
+            res.redirect('/cart')
         })
         .catch(error => console.log(error));
 
-//     let fetchedCart;
-//     let newQuantity = 1;
-//     req.user.getCart()
-//         .then(cart => {
-//             fetchedCart = cart;
-//             return cart.getProducts({
-//                 where: { id: prodId }
-//             });
-//         })
-//         .then(products => {
-//             let productPost;
-//             if (products.length > 0) {
-//                 productPost = products[0]
-//             }
-//             if (productPost) {
-//                 const oldQuantity = productPost.cartItem.quantity;
-//                 newQuantity = oldQuantity + 1;
-//                 return productPost;
-//             }
-//             return Product.findById(prodId)
-//         })
-//         .then(productPost => {
-//             return fetchedCart.addProduct(productPost, {
-//                     through: { quantity: newQuantity }
-//                 });
-//         })
-//         .then(() => {
-//            res.redirect('/cart')
-//         })
-//         .catch(error => console.log(error));
-// };
+};
 
-// exports.postCartDeleteProduct = (req, res, next) => {
-//     const prodId = req.body.productCartId;
-//     req.user.getCart()
-//         .then(cart => {
-//             return cart.getProducts({ where: { id: prodId } });
-//         })
-//         .then(products => {
-//             const product = products[0];
-//             return product.cartItem.destroy();
-//         })
-//         .then(result => {
-//         res.redirect('/cart');
-//     })
+exports.postCartDeleteProduct = (req, res, next) => {
+    const prodId = req.body.productCartId;
+    req.user
+        .deleteItemFromCart(prodId)
+        .then(result => {
+            res.redirect('/cart');
+        }).catch(error => console.log(error));
+    
 };
 
 exports.postOrder = (req, res, next) => {
