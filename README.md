@@ -1,2 +1,2 @@
 # ECommerce with nodejs
-- backend application built with expressJS, nodeJS, mysql, ejs, sequelize, mongoDB
+- backend application built with expressJS, nodeJS, mongoDB, mongoose
