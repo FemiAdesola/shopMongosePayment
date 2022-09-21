@@ -1,7 +1,7 @@
 'use strict';
 const Product = require('../models/product');
-// const Cart = require('../models/cart');
-// const Order = require('../models/order');
+
+const Order= require('../models/order');
 
 exports.getProducts = (req, res, next) => {
     // for get all products without repeat the product
@@ -84,16 +84,35 @@ exports.postCartDeleteProduct = (req, res, next) => {
     
 };
 
+// post order
 exports.postOrder = (req, res, next) => {
-    let fetchedCartOrdered;
     req.user
-        .addOrder()
+        .populate('cart.items.productId')
+        .then(userCartProducts => {
+            const productsByUser = userCartProducts.cart.items
+                .map(i => {
+                    return {
+                        quantity: i.quantity,
+                        productData: {...i.productId._doc}
+                    }
+                });
+            const order = new Order({
+                user: {
+                    name: req.user.name,
+                    userId:req.user
+                },
+                products: productsByUser
+            });
+            return order.save();
+        })
         .then(result => {
             res.redirect('/orders')
         })
         .catch(error => console.log(error));  
 };
 
+
+// get orders
 exports.getOrders = (req, res, next) => {
     req.user.getOrders()
         .then(orders => {
