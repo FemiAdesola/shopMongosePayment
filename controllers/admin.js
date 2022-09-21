@@ -35,6 +35,25 @@ exports.postAddProduct = (req, res, next) => {
     .catch(error => (console.log(error)));
 };
 
+// get the product
+exports.getProducts = (req, res, next) => {
+    Product.find()
+        // // for selection certain field
+        // .select('title price -_id')
+        // .populate('userId', 'name')
+        .then((products) => {
+            console.log(products)
+            res.render('admin/products', {
+            prod: products,
+            pageTitle: 'Admin Products',
+            path: '/admin/products',
+        });
+        })
+        .catch(error =>{
+            console.log(error)
+        });
+};
+
 // edit product
 exports.getEditProduct = (req, res, next) => {
     const editMode = req.query.edit;
@@ -80,22 +99,6 @@ exports.postEditProduct = (req, res, next)=>{
         })
         .catch(error => console.log(error));
 };
-
-// get the product
-exports.getProducts = (req, res, next) => {
-    Product.find()
-        .then((products) => {
-            res.render('admin/products', {
-            prod: products,
-            pageTitle: 'Admin Products',
-            path: '/admin/products',
-        });
-        })
-        .catch(error =>{
-            console.log(error)
-        });
-};
-
 
 // delete the product
 exports.postDeleteProduct = (req, res, next) => {
