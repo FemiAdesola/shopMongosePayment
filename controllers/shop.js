@@ -31,7 +31,6 @@ exports.getProduct = (req, res, next) => {
         .catch(error => console.log(error))
 };
 
-
 exports.getIndex = (req, res, next) => {
     Product.find()
         .then(products => {

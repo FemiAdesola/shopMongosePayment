@@ -38,9 +38,6 @@ exports.postAddProduct = (req, res, next) => {
 // get the product
 exports.getProducts = (req, res, next) => {
     Product.find()
-        // // for selection certain field
-        // .select('title price -_id')
-        // .populate('userId', 'name')
         .then((products) => {
             console.log(products)
             res.render('admin/products', {
