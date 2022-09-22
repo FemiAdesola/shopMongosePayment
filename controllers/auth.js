@@ -2,17 +2,23 @@
 
 // get orders
 exports.getLogin = (req, res, next) => {
+    const isLoggedIn = req
+        .get('Cookie')
+        .split(';')[0]
+        .trim()
+        .split('=')[1] === 'true';
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'You Login',
-        isAuthenticated: req.isLoggedIn
+        isAuthenticated: isLoggedIn
     });
     
 };
 
 // psot orders
 exports.postLogin = (req, res, next) => {
-    req.isLoggedIn = true
+    // here we set cookies for global authentication
+    res.setHeader('set-Cookie', 'loggedIn=true');
     res.redirect('/')
     
 };
