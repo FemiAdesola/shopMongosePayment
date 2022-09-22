@@ -4,6 +4,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -11,7 +14,8 @@ const authRoutes = require('./routes/auth');
 const errorController = require('./controllers/error');
 
 // for database
-const mongoConnect = require('./util/database.js').mongoConnect;
+// const mongoConnect = require('./util/database.js').mongoConnect;
+const MONGODB_URL = 'mongodb+srv://Femi:CwRbXZuHSUaMW9yH@shop.fftoabl.mongodb.net/shop';
 
 // User
 const User = require('./models/user');
@@ -19,12 +23,26 @@ const User = require('./models/user');
 // from express
 const app = express();
 
+// for cookies/ seesion
+const store = new MongoDBStore({
+    uri: MONGODB_URL,
+    collection:'session'
+});
+
 // by using ejs engine
 app.set('view engine', 'ejs');
 app.set('views', 'pages');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// for cookies/ seesion
+app.use(session({
+    secret: 'the secret',
+    resave: false,
+    saveUninitialized: false,
+    store:store
+}));
 
 // for user
 app.use((req, res, next) => {
@@ -42,7 +60,7 @@ app.use(authRoutes);
 app.use(errorController.get404);
 
 // server connection with mongoose 
-mongoose.connect('mongodb+srv://Femi:CwRbXZuHSUaMW9yH@shop.fftoabl.mongodb.net/shop?retryWrites=true&w=majority')
+mongoose.connect(MONGODB_URL)
     .then(result => {
         // to avoid duplicate 
         User.findOne().then(user => {
