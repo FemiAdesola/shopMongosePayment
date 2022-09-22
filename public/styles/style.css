@@ -111,12 +111,13 @@ button{
   background: whitesmoke;
   border-radius: 3px;
   cursor: pointer;
+  
 }
 
 .main-header__item button:hover,
 .main-header__item button:active {
-    background-color: blue;
-    color: white;
+    background-color: #dbc441;
+    color: black;
 }
        
 
@@ -165,7 +166,7 @@ button{
   display: inline-block;
   padding: 0.25rem 1rem;
   font: inherit;
-  border: 1px solid #dbc441;
+  /* border: 1px solid #dbc441; */
   color: #dbc441;
   background: #464f4e;
   border-radius: 3px;
