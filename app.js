@@ -78,19 +78,21 @@ app.use(errorController.get404);
 // server connection with mongoose 
 mongoose.connect(MONGODB_URL)
     .then(result => {
-        // to avoid duplicate 
-        User.findOne().then(user => {
-            if (!user) {
-                const user = new User({
-                    name: 'Femi',
-                    email: 'Ade@yahoo.com',
-                    cart: {
-                        items: []
-                    }
-                });
-                user.save();
-            }
-        });
+        // // to avoid duplicate 
+        // User.findOne().then(user => {
+        //     if (!user) {
+        //         const user = new User({
+        //             name: 'Femi',
+        //             email: 'Ade@yahoo.com',
+        //             cart: {
+        //                 items: []
+        //             }
+        //         });
+        //         user.save();
+        //     }
+        // });
+    
+        
         app.listen(3000)
     })
     .catch(error => {
