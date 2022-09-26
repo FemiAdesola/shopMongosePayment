@@ -51,7 +51,6 @@ exports.postLogin = (req, res, next) => {
     // to find user by email and password
     const email = req.body.email;
     const password = req.body.password;
-    console.log(email)
     User.findOne({ email: email })
         
         .then(user => {
