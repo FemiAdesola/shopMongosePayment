@@ -25,15 +25,44 @@ exports.getLogin = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
     // here we set cookies for global authentication
     // res.setHeader('set-Cookie', 'loggedIn=true');
+
+    //  User.findById('63314d51394d63a502492f34')
+    //     .then(user => {
+    //         req.session.isLoggedIn = true;
+    //         req.session.user = user;
+    //         req.session.save(error => {
+    //             console.log(error);
+    //             res.redirect('/');
+    //         })
+    //     })
+    //     .catch(error => console.log(error));
     
-    User.findById('632af6e411a86492cb452c83')
+    // to find user by email and password
+    const email = req.body.email;
+    const password = req.body.password;
+    User.findOne({ email: email })
         .then(user => {
-            req.session.isLoggedIn = true;
-            req.session.user = user;
-            req.session.save(error => {
-                console.log(error);
-                res.redirect('/');
-            })
+            if (!user) {
+                return res.redirect('/login')
+            }
+           bcrypt
+                .compare(password, user.password)
+                .then(doMatch => {
+                    if (doMatch) {
+                        req.session.isLoggedIn = true;
+                        req.session.user = user;
+                        return req.session.save(error => {
+                            console.log(error);
+                            res.redirect('/');
+                        });
+                    }
+                    res.redirect('/login')
+                 })
+                .catch(error => {
+                    console.log(error);
+                    res.redirect('/login')
+                });
+            
         })
         .catch(error => console.log(error));
 };
@@ -67,7 +96,8 @@ exports.postSignup = (req, res, next) => {
         return res.redirect('/signup');
       }
         // for creating hash password we can have nested function here
-        return bcrypt.hash(password, 12)
+        return bcrypt
+            .hash(password, 12)
             .then(hashPassword => {
                 const user = new User({
                     email: email,
