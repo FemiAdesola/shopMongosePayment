@@ -13,54 +13,73 @@ exports.getLogin = (req, res, next) => {
 
     // console.log(req.session.isLoggedIn)
 
+    // error message for view page
+    let message = req.flash('error');
+    if (message.length > 0) {
+        message = message[0];
+    } else {
+        message = null;
+    }
+
     res.render('auth/login', {
         path: '/login',
-        pageTitle: 'You Login',
-        isAuthenticated: false
+        pageTitle: 'Login',
+        // isAuthenticated: false
+         errorMessage: message
     });
     
 };
 
 // get sigunp 
 exports.getSignup = (req, res, next) => {
+    let message = req.flash('error');
+    if (message.length > 0) {
+        message = message[0];
+    } else {
+        message = null;
+    }   
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
-    isAuthenticated: false
+    // isAuthenticated: false
+    errorMessage: message
   });
 };
 
-// // post loging
-// exports.postLogin = (req, res, next) => {
-//     // to find user by email and password
-//     const email = req.body.email;
-//     const password = req.body.password;
-//     User.findOne({ email: email })
-//         .then(user => {
-//             if (!user) {
-//                 return res.redirect('/login') 
-//             }
-//             bcrypt
-//                 .compare(password, user.password)
-//                 .then(doMatch => {
-//                     if (doMatch) {
-//                         req.session.isLoggedIn = true;
-//                         req.session.user = user;
-//                         return req.session.save(error => {
-//                             console.log(error);
-//                             res.redirect('/');
-//                         });
-//                     }
-//                     res.redirect('/login')
-//                  })
-//                 .catch(error => {
-//                     console.log(error);
-//                     res.redirect('/login')
-//                 });
-            
-//         })
-//         .catch(error => console.log(error));
-// };
+// post loging
+exports.postLogin = (req, res, next) => {
+    // to find user by email and password
+    const email = req.body.email;
+    const password = req.body.password;
+    console.log(email)
+    User.findOne({ email: email })
+        
+        .then(user => {
+            if (!user) {
+                req.flash('error', 'Invalid email or password.');
+                return res.redirect('/login');
+            }
+            bcrypt
+                .compare(password, user.password)
+                .then(doMatch => {
+                    if (doMatch) {
+                        req.session.isLoggedIn = true;
+                        req.session.user = user;
+                        return req.session.save(error => {
+                            console.log(error);
+                            res.redirect('/');
+                        });
+                    }
+                    req.flash('error', 'Invalid email or password.');
+                    res.redirect('/login');
+                 })
+                .catch(error => {
+                    console.log(error);
+                    res.redirect('/login')
+                });
+        })
+        .catch(error => console.log(error));
+};
 
 
 // post sigunp 
@@ -71,6 +90,7 @@ exports.postSignup = (req, res, next) => {
   User.findOne({ email: email })
     .then(userDoc => {
       if (userDoc) {
+        req.flash('error', 'E-Mail exists already, please pick a different one.');
         return res.redirect('/signup');
       }
         // for creating hash password we can have nested function here
@@ -94,6 +114,8 @@ exports.postSignup = (req, res, next) => {
     });
 };
 
+
+
 // post logout
 exports.postLogout = (req, res, next) => {
     req.session.destroy((error) => {
@@ -105,18 +127,18 @@ exports.postLogout = (req, res, next) => {
 
 
 
-exports.postLogin = (req, res, next) => {
-    // here we set cookies for global authentication
-    // res.setHeader('set-Cookie', 'loggedIn=true');
+// exports.postLogin = (req, res, next) => {
+//     // here we set cookies for global authentication
+//     // res.setHeader('set-Cookie', 'loggedIn=true');
 
-     User.findById('6331740295d3b8e8269f1c39')
-        .then(user => {
-            req.session.isLoggedIn = true;
-            req.session.user = user;
-            req.session.save(error => {
-                console.log(error);
-                res.redirect('/');
-            })
-        })
-        .catch(error => console.log(error));
-}
+//      User.findById('633191025b662a39b90b10c6')
+//         .then(user => {
+//             req.session.isLoggedIn = true;
+//             req.session.user = user;
+//             req.session.save(error => {
+//                 console.log(error);
+//                 res.redirect('/');
+//             })
+//         })
+//         .catch(error => console.log(error));
+// }
