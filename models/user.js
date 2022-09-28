@@ -13,6 +13,8 @@ const userSchema = new Schema({
         minlength: 6,
         trim:true
     },
+    resetToken: String,
+    resetTokenExpiration:Date,
     cart: {
         items: [{
             productId: {type:Schema.Types.ObjectId, ref:'Product', required:true},
