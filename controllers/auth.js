@@ -112,12 +112,12 @@ exports.postSignup = (req, res, next) => {
             });
     }
         //
-  User.findOne({ email: email })
-    .then(userDoc => {
-      if (userDoc) {
-        req.flash('error', 'E-Mail exists already, please pick a different one.');
-        return res.redirect('/signup');
-      }
+//   User.findOne({ email: email })
+//     .then(userDoc => {
+//       if (userDoc) {
+//         req.flash('error', 'E-Mail exists already, please pick a different one.');
+//         return res.redirect('/signup');
+//       }
         // for creating hash password we can have nested function here
         return bcrypt
             .hash(password, 12)
@@ -142,10 +142,10 @@ exports.postSignup = (req, res, next) => {
             }).catch(err => {
                 console.log(err);
             });
-    }) 
-    .catch(err => {
-      console.log(err);
-    });
+    // }) 
+    // .catch(err => {
+    //   console.log(err);
+    // });
 };
 
 
