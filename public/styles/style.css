@@ -366,7 +366,7 @@ height: 40px;
 /* error message */
 .user-message{
   margin: auto;
-  width: 90%;
+  width: 30%;
   border: 1px solid red;
   padding: 20px;
   border-radius: 5px;
@@ -377,5 +377,5 @@ height: 40px;
 .user-message--error{
   border-color: red ;
   background: rgb(221, 146, 146);
-  color: red;
+  color: #1d1515;
 }
