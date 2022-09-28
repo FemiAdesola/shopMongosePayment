@@ -24,12 +24,20 @@ router.post('/signup',
             if (value === 'ade@yahoo.com') {
                 throw new Error('This email address is forbidden!')
             }
-            return true
+            return true;
         }),
     body('password',
         'Please provides a password with only numbers and text and at least 5 characteers'
     )
         .isLength({ min: 5 }).isAlphanumeric(),
+    //  for confirm password
+    body('confirmPassword').custom((value, { req }) => {
+        if (value !== req.body.password) {
+            throw new Error('Password is not match');
+        }
+        return true;
+    }),
+
     //
     authController.postSignup
 );
