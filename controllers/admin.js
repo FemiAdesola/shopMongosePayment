@@ -37,7 +37,10 @@ exports.postAddProduct = (req, res, next) => {
 
 // get the product
 exports.getProducts = (req, res, next) => {
-    Product.find()
+    Product.find({
+        // line below ( userId: req.user._id) restrict the amount of product we can see by each user
+        userId: req.user._id
+    })
         .then((products) => {
             console.log(products)
             res.render('admin/products', {
@@ -86,15 +89,20 @@ exports.postEditProduct = (req, res, next)=>{
     
     Product.findById(prodId)
         .then(productUpdate => {
+            //  the if line restrict to user 
+            if (productUpdate.userId.toString() !== req.user._id.toString()) {
+                return res.redirect('/');
+            }
             productUpdate.title = updatedTitle;
             productUpdate.imageUrl=updatedImageUrl;
             productUpdate.price = updatedPrice;
             productUpdate.description = updatedDescription;
-            return productUpdate.save()  
-        })
-        .then(result => {
-            console.log('UPDATED PRODUCT');
-            res.redirect('/admin/products');
+            return productUpdate
+                .save()
+                .then(result => {
+                    console.log('UPDATED PRODUCT');
+                    res.redirect('/admin/products');
+                });
         })
         .catch(error => console.log(error));
 };
@@ -103,7 +111,8 @@ exports.postEditProduct = (req, res, next)=>{
 exports.postDeleteProduct = (req, res, next) => {
     // productDeleteId from delete section in admin product.ejs 
     const prodDeleteId = req.body.productDeleteId;
-    Product.findByIdAndRemove(prodDeleteId)
+    // Product.findByIdAndRemove(prodDeleteId)
+    Product.deleteOne({ _id: prodDeleteId, userId: req.user._id })
         .then(() => {
             console.log('PRODUCT DELETED');
             res.redirect('/admin/products');
