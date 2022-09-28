@@ -147,7 +147,7 @@ exports.postLogout = (req, res, next) => {
 
 // reset password
 exports.getPasswordReset = (req, res, next) => {
-     // error message for view page
+    // error message for view page
     let message = req.flash('error');
     if (message.length > 0) {
         message = message[0];
@@ -159,10 +159,10 @@ exports.getPasswordReset = (req, res, next) => {
         pageTitle: 'Reset Password ',
         errorMessage: message
     });
-}
+};
 
 // for post reset password
-exports.postPasswordReset = (req, res, next) => { 
+exports.postPasswordReset = (req, res, next) => {
     crypto.randomBytes(32, (error, buffer) => {
         if (error) {
             console(error);
@@ -195,8 +195,37 @@ exports.postPasswordReset = (req, res, next) => {
             })
             .catch(err => {
                 console.log(err);
-            });    
-    })
+            });
+    });
+};
+
+
+// For creating new password
+exports.getNewPassord = (req, res, next) => {
+    // for requesting token 
+    const token = req.params.token;
+    User.findOne({
+        resetToken: token,
+        // gt means greater than 
+        resetTokenExpiration: { $gt: Date.now() }
+        })
+        .then(user => {
+            let message = req.flash('error');
+            if (message.length > 0) {
+                message = message[0];
+            } else {
+                message = null;
+            }
+            res.render('auth/newPassword', {
+                path: '/new-password',
+                pageTitle: 'New Password ',
+                errorMessage: message,
+                userId:user._id.toString()
+            });
+        })
+        .catch(error => console.log(error));
+     // error message for view page
+    
 }
 
 // exports.postLogin = (req, res, next) => {
