@@ -201,14 +201,14 @@ exports.postPasswordReset = (req, res, next) => {
 
 
 // For creating new password
-exports.getNewPassord = (req, res, next) => {
+exports.getNewPassword = (req, res, next) => {
     // for requesting token 
     const token = req.params.token;
     User.findOne({
         resetToken: token,
         // gt means greater than 
         resetTokenExpiration: { $gt: Date.now() }
-        })
+    })
         .then(user => {
             let message = req.flash('error');
             if (message.length > 0) {
@@ -220,13 +220,44 @@ exports.getNewPassord = (req, res, next) => {
                 path: '/new-password',
                 pageTitle: 'New Password ',
                 errorMessage: message,
-                userId:user._id.toString()
+                userId: user._id.toString(),
+                passwordToken:token
             });
         })
         .catch(error => console.log(error));
-     // error message for view page
-    
-}
+};
+
+// for posting new password
+exports.postNewPassword = (req, res, next) => {
+    // for receiving new password
+    const newPassword = req.body.password;
+    const userId = req.body.userId;
+    const passwordToken = req.body.passwordToken;
+    let resetUser;
+
+    User.findOne({
+        resetToken: passwordToken,
+        resetTokenExpiration: { $gt: Date.now() },
+        _id: userId
+    })
+        .then(user => {
+            resetUser = user;
+            return bcrypt.hashSync(newPassword, 12);
+        })
+        .then(hashedPassword => {
+            resetUser.password = hashedPassword;
+            resetUser.resetToken = undefined;
+            resetUser.resetTokenExpiration = undefined; 
+            return resetUser.save();
+        })
+        .then(result => {
+            res.redirect('/login');
+        })
+        .catch(error => console.log(error));
+};
+
+
+
 
 // exports.postLogin = (req, res, next) => {
 //     // here we set cookies for global authentication
