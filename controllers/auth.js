@@ -40,7 +40,13 @@ exports.getLogin = (req, res, next) => {
         path: '/login',
         pageTitle: 'Login',
         // isAuthenticated: false
-         errorMessage: message
+        errorMessage: message,
+        // for loading initial value 
+        oldInput: {
+            email: '',
+            password: '',
+            confirmPassword: '',
+         }
     });
     
 };
@@ -57,7 +63,13 @@ exports.getSignup = (req, res, next) => {
     path: '/signup',
     pageTitle: 'Signup',
     // isAuthenticated: false
-    errorMessage: message
+      errorMessage: message,
+     // for loading initial value 
+        oldInput: {
+            email: '',
+            password: '',
+            confirmPassword: '',
+         }
   });
 };
 
@@ -66,6 +78,19 @@ exports.postLogin = (req, res, next) => {
     // to find user by email and password
     const email = req.body.email;
     const password = req.body.password;
+
+    // erroe validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log(errors.array());
+        return res.status(422)
+            .render('auth/login', {
+            path: '/login',
+            pageTitle: 'Login',
+            errorMessage: errors.array()[0].msg
+            });
+    }
+
     User.findOne({ email: email })
         
         .then(user => {
@@ -106,9 +131,15 @@ exports.postSignup = (req, res, next) => {
         console.log(errors.array());
         return res.status(422)
             .render('auth/signup', {
-            path: '/signup',
-            pageTitle: 'Signup',
-            errorMessage: errors.array()[0].msg
+                path: '/signup',
+                pageTitle: 'Signup',
+                errorMessage: errors.array()[0].msg,
+                //  for getting old email and password
+                oldInput: {
+                    email: email,
+                    password: password,
+                    confirmPassword: req.body.confirmPassword
+                }
             });
     }
         //
