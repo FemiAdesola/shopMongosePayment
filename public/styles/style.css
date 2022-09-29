@@ -110,6 +110,9 @@ height: 40px;
 .form-control textarea:focus{
   outline-color: #dbc441;;
 }
+.form-control input.invalid{
+  border-color: red;
+}
 
 /* button{
   font: inherit;

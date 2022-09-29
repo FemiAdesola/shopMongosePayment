@@ -17,6 +17,7 @@ const transporter = nodemailer.createTransport(sendgridTransport({
 const { validationResult } = require('express-validator/check');
 
 const User = require('../models/user');
+const { ValidationError } = require('sequelize');
 
 // get login
 exports.getLogin = (req, res, next) => {
@@ -41,12 +42,14 @@ exports.getLogin = (req, res, next) => {
         pageTitle: 'Login',
         // isAuthenticated: false
         errorMessage: message,
-        // for loading initial value 
-        oldInput: {
-            email: '',
-            password: '',
-            confirmPassword: '',
-         }
+        // // for loading initial value 
+        // oldInput: {
+        //     email: '',
+        //     password: '',
+        //     confirmPassword: '',
+        // },
+        // //  for get special field for error
+        // validationErrors:[]
     });
     
 };
@@ -69,7 +72,9 @@ exports.getSignup = (req, res, next) => {
             email: '',
             password: '',
             confirmPassword: '',
-         }
+        },
+        //  for get special field for error
+        validationErrors:[]
   });
 };
 
@@ -139,7 +144,9 @@ exports.postSignup = (req, res, next) => {
                     email: email,
                     password: password,
                     confirmPassword: req.body.confirmPassword
-                }
+                },
+                //  for get special field for error
+                validationErrors:errors.array()
             });
     }
         //
