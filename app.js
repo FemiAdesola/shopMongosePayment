@@ -21,6 +21,7 @@ const MONGODB_URL = 'mongodb+srv://Femi:CwRbXZuHSUaMW9yH@shop.fftoabl.mongodb.ne
 
 // User
 const User = require('./models/user');
+const { Error } = require('sequelize');
 
 // from express
 const app = express();
@@ -52,31 +53,6 @@ app.use(session({
 app.use(csrfProtection);
 app.use(flash());
 
-// for user
-// app.use((req, res, next) => {
-//     User.findById("632af6e411a86492cb452c83")
-//         .then(user => {
-//             req.user = user;
-//             next();
-//         })
-//         .catch(error =>console.log(error));
-// })
-
-
-
-
-app.use((req, res, next) => {
-  if (!req.session.user) {
-    return next();
-  }
-  User.findById(req.session.user._id)
-    .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(err => console.log(err));
-});
-
 // flash and csurf
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
@@ -85,29 +61,47 @@ app.use((req, res, next) => {
 });
 
 
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
+    .then(user => {
+      // error handling async
+      if (!user) {
+        return next();
+      }
+      //
+      req.user = user;
+      next();
+    })
+    .catch(error => {
+      throw new Error(error)
+    });
+});
+
+
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
+
+app.use('/500', errorController.get500);
 app.use(errorController.get404);
+
+// error 500
+app.use((error, req, res, next) => {
+  // res.redirect('/500');
+  res.status(500).render('500', {
+    pageTitle: 'Error!',
+    path: '/500',
+    isAuthenticated: req.session.isLoggedIn
+  });
+});
 
 // server connection with mongoose 
 mongoose.connect(MONGODB_URL)
     .then(result => {
-        // // to avoid duplicate 
-        // User.findOne().then(user => {
-        //     if (!user) {
-        //         const user = new User({
-        //             name: 'Femi',
-        //             email: 'Ade@yahoo.com',
-        //             cart: {
-        //                 items: []
-        //             }
-        //         });
-        //         user.save();
-        //     }
-        // });
-    
-
         app.listen(3000)
     })
     .catch(error => {

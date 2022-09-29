@@ -1,6 +1,6 @@
 'use strict';
+const mongoose = require('mongoose');
 const { validationResult } = require('express-validator/check');
-const { ValidationError } = require('sequelize');
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
@@ -56,7 +56,11 @@ exports.postAddProduct = (req, res, next) => {
         console.log('Created product');
         res.redirect('/admin/products');
      })
-    .catch(error => (console.log(error)));
+    .catch(error => {
+        const erro = new Error(error);
+        error.httpStatusCode = 500;
+        return next(erro);
+    });
 };
 
 // get the product
@@ -74,8 +78,10 @@ exports.getProducts = (req, res, next) => {
                 // isAuthenticated: req.session.isLoggedIn
             });
         })
-        .catch(error =>{
-            console.log(error)
+        .catch(error => {
+            const erro = new Error(error);
+            error.httpStatusCode = 500;
+            return next(erro);
         });
 };
 
@@ -103,7 +109,11 @@ exports.getEditProduct = (req, res, next) => {
                 // isAuthenticated: req.session.isLoggedIn
             });
         })
-        .catch(error=>console.log(error)); 
+        .catch(error => {
+            const erro = new Error(error);
+            error.httpStatusCode = 500;
+            return next(erro);
+        });
 };
 
 // edit post product 
@@ -152,7 +162,11 @@ exports.postEditProduct = (req, res, next)=>{
                     res.redirect('/admin/products');
                 });
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            const erro = new Error(error);
+            error.httpStatusCode = 500;
+            return next(erro);
+        });
 };
 
 // delete the product
@@ -165,5 +179,9 @@ exports.postDeleteProduct = (req, res, next) => {
             console.log('PRODUCT DELETED');
             res.redirect('/admin/products');
         })
-        .catch(error=> console.log(error));
+        .catch(error => {
+            const erro = new Error(error);
+            error.httpStatusCode = 500;
+            return next(erro);
+        });
 };
