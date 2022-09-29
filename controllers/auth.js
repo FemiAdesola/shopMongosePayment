@@ -1,7 +1,6 @@
 'use strict';
 // for generate password 
 const crypto = require('crypto');
-
 const bcrypt = require('bcryptjs');
 
 // nodemailer
@@ -21,14 +20,6 @@ const { ValidationError } = require('sequelize');
 
 // get login
 exports.getLogin = (req, res, next) => {
-    // const isLoggedIn = req
-    //     .get('Cookie')
-    //     .split(';')[0]
-    //     .trim()
-    //     .split('=')[1] === 'true';
-
-    // console.log(req.session.isLoggedIn)
-
     // error message for view page
     let message = req.flash('error');
     if (message.length > 0) {
@@ -40,7 +31,6 @@ exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
-        // isAuthenticated: false
         errorMessage: message,
         // for loading initial value 
         oldInput: {
@@ -64,7 +54,6 @@ exports.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
-    // isAuthenticated: false
       errorMessage: message,
      // for loading initial value 
         oldInput: {
@@ -106,9 +95,6 @@ exports.postLogin = (req, res, next) => {
         
         .then(user => {
             if (!user) {
-                // req.flash('error', 'Invalid email or password.');
-                // return res.redirect('/login');
-
                 //  for getting field error
                 return res.status(422)
                 .render('auth/login', {
@@ -135,9 +121,6 @@ exports.postLogin = (req, res, next) => {
                             res.redirect('/');
                         });
                     }
-                    // req.flash('error', 'Invalid email or password.');
-                    // res.redirect('/login');
-
                     return res.status(422)
                     .render('auth/login', {
                         path: '/login',
@@ -164,7 +147,6 @@ exports.postLogin = (req, res, next) => {
         });
 };
 
-
 // post sigunp 
 exports.postSignup = (req, res, next) => {
   const email = req.body.email;
@@ -188,14 +170,6 @@ exports.postSignup = (req, res, next) => {
                 validationErrors:errors.array()
             });
     }
-        //
-//   User.findOne({ email: email })
-//     .then(userDoc => {
-//       if (userDoc) {
-//         req.flash('error', 'E-Mail exists already, please pick a different one.');
-//         return res.redirect('/signup');
-//       }
-        // for creating hash password we can have nested function here
         return bcrypt
             .hash(password, 12)
             .then(hashPassword => {
@@ -223,8 +197,6 @@ exports.postSignup = (req, res, next) => {
                 return next(erro);
             });
 };
-
-
 
 // post logout
 exports.postLogout = (req, res, next) => {
@@ -354,22 +326,3 @@ exports.postNewPassword = (req, res, next) => {
             return next(erro);
         });
 };
-
-
-
-
-// exports.postLogin = (req, res, next) => {
-//     // here we set cookies for global authentication
-//     // res.setHeader('set-Cookie', 'loggedIn=true');
-
-//      User.findById('633191025b662a39b90b10c6')
-//         .then(user => {
-//             req.session.isLoggedIn = true;
-//             req.session.user = user;
-//             req.session.save(error => {
-//                 console.log(error);
-//                 res.redirect('/');
-//             })
-//         })
-//         .catch(error => console.log(error));
-// }

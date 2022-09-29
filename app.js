@@ -16,7 +16,6 @@ const authRoutes = require('./routes/auth');
 const errorController = require('./controllers/error');
 
 // for database
-// const mongoConnect = require('./util/database.js').mongoConnect;
 const MONGODB_URL = 'mongodb+srv://Femi:CwRbXZuHSUaMW9yH@shop.fftoabl.mongodb.net/shop';
 
 // User
@@ -79,8 +78,6 @@ app.use((req, res, next) => {
       throw new Error(error)
     });
 });
-
-
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

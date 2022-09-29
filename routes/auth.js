@@ -38,10 +38,6 @@ router.post('/signup',
         .isEmail()
         .withMessage('Please enter valid email')
         .custom((value, { req }) => {
-            // if (value === 'ade@yahoo.com') {
-            //     throw new Error('This email address is forbidden!')
-            // }
-            // return true;
             return User.findOne({ email: value })
                 .then(userDoc => {
                     if (userDoc) {

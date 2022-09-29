@@ -11,14 +11,11 @@ exports.getAddProduct = (req, res, next) => {
         hasError: false,
         errorMessage: null,
         validationErrors:[]
-        // isAuthenticated: req.session.isLoggedIn
     });
 };
 
 exports.postAddProduct = (req, res, next) => {
-    // console.log(req.body)
-    // for the data folder, we pass what we pass in the contructor inside product.js 
-    const title = req.body.title;
+   const title = req.body.title;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
@@ -41,7 +38,6 @@ exports.postAddProduct = (req, res, next) => {
             validationErrors:errors.array()
         }); 
     }
-
     // for database sequ...
     const product = new Product({
         title:title,
