@@ -1,5 +1,6 @@
 'use strict';
 const { validationResult } = require('express-validator/check');
+const { ValidationError } = require('sequelize');
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
@@ -8,7 +9,8 @@ exports.getAddProduct = (req, res, next) => {
         path: '/admin/add-product',
         editing: false,
         hasError: false,
-        errorMessage:null
+        errorMessage: null,
+        validationErrors:[]
         // isAuthenticated: req.session.isLoggedIn
     });
 };
@@ -35,7 +37,8 @@ exports.postAddProduct = (req, res, next) => {
                 price:price,
                 description: description,
             },
-            errorMessage:errors.array()[0].msg
+            errorMessage: errors.array()[0].msg,
+            validationErrors:errors.array()
         }); 
     }
 
@@ -95,7 +98,8 @@ exports.getEditProduct = (req, res, next) => {
                 editing: editMode,
                 product: prodEdit,
                 hasError: true,
-                errorMessage:null
+                errorMessage: null,
+                validationErrors:[]
                 // isAuthenticated: req.session.isLoggedIn
             });
         })
@@ -110,6 +114,27 @@ exports.postEditProduct = (req, res, next)=>{
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
     
+
+// error validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).render('admin/editProduct', {
+            pageTitle: 'Edit Product',
+            path: '/admin/edit-product',
+            editing: true,
+            hasError:true,
+            product: {
+                title:updatedTitle,
+                imageUrl:updatedImageUrl,
+                price:updatedPrice,
+                description: updatedDescription,
+                _id:prodId
+            },
+            errorMessage: errors.array()[0].msg,
+            validationErrors:errors.array()
+        }); 
+    }
+
     Product.findById(prodId)
         .then(productUpdate => {
             //  the if line restrict to user 

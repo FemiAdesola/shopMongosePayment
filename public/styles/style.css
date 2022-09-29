@@ -110,7 +110,9 @@ height: 40px;
 .form-control textarea:focus{
   outline-color: #dbc441;;
 }
-.form-control input.invalid{
+
+.form-control input.invalid,
+.form-control textarea.invalid{
   border-color: red;
 }
 
