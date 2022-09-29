@@ -1,4 +1,5 @@
 'use strict';
+const { validationResult } = require('express-validator/check');
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
@@ -6,6 +7,8 @@ exports.getAddProduct = (req, res, next) => {
         pageTitle: 'Add Product',
         path: '/admin/add-product',
         editing: false,
+        hasError: false,
+        errorMessage:null
         // isAuthenticated: req.session.isLoggedIn
     });
 };
@@ -17,6 +20,24 @@ exports.postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
     const description = req.body.description;
+
+// erroe validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).render('admin/editProduct', {
+            pageTitle: 'Add Product',
+            path: '/admin/edit-product',
+            editing: false,
+            hasError:true,
+            product: {
+                title:title,
+                imageUrl:imageUrl,
+                price:price,
+                description: description,
+            },
+            errorMessage:errors.array()[0].msg
+        }); 
+    }
 
     // for database sequ...
     const product = new Product({
@@ -73,6 +94,8 @@ exports.getEditProduct = (req, res, next) => {
                 path: '/admin/edit-product',
                 editing: editMode,
                 product: prodEdit,
+                hasError: true,
+                errorMessage:null
                 // isAuthenticated: req.session.isLoggedIn
             });
         })
