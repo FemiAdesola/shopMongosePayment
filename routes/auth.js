@@ -14,12 +14,16 @@ const router = express.Router();
 router.get('/login', authController.getLogin);
 router.post('/login',
     [
-    body('email')
-      .isEmail()
-      .withMessage('Please enter a valid email address.'),
+        body('email')
+            .isEmail()
+            .withMessage('Please enter a valid email address.')
+            // for removing changing the character to lowercase
+            .normalizeEmail(),
     body('password', 'Password has to be valid.')
-      .isLength({ min: 5 })
-      .isAlphanumeric()
+        .isLength({ min: 5 })
+        .isAlphanumeric()
+    // for triming password by removing excess space
+        .trim(),
   ],
     authController.postLogin
 );
@@ -44,13 +48,14 @@ router.post('/signup',
                         return Promise.reject('E-Mail exists already, please pick a different one.');
                     }
                 });
-        }),
+        })
+    .normalizeEmail(),
     body('password',
         'Please provides a password with only numbers and text and at least 5 characteers'
     )
-        .isLength({ min: 5 }).isAlphanumeric(),
+        .isLength({ min: 5 }).isAlphanumeric().trim(),
     //  for confirm password
-    body('confirmPassword').custom((value, { req }) => {
+    body('confirmPassword').trim().custom((value, { req }) => {
         if (value !== req.body.password) {
             throw new Error('Password is not match');
         }
