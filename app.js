@@ -65,6 +65,9 @@ app.set('views', 'pages');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// for serving inage statically 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 // for multer || the name image is comming from ejs file 
 app.use(multer({storage:fileStorage, fileFilter:fileFilter}).single('image'));
 
