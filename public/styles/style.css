@@ -105,6 +105,11 @@ form {
 .form-control input{
 height: 40px;
 }
+.form-control input[type=file]::-webkit-file-upload-button  {
+height: 100%;
+width: 50%;
+border-radius: 5px;
+}
 
 .form-control input:focus,
 .form-control textarea:focus{
