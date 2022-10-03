@@ -384,3 +384,22 @@ height: 40px;
   background: rgb(221, 146, 146);
   color: #1d1515;
 }
+
+/* pagination */
+.pagination{
+  margin-top: 20px;
+  text-align: center;
+}
+.pagination a{
+  text-decoration: none;
+  color: grey;
+  padding: 10px;
+  border: 1px solid #252522;
+  margin: 0 16px;
+}
+.pagination a:hover,
+.pagination a:active,
+.pagination a.active{
+  background:#3b3b38;
+  color: yellow;
+}

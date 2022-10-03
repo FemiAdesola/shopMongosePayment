@@ -6,18 +6,58 @@ const PDFDocument = require('pdfkit');
 
 const Product = require('../models/product');
 
-const Order= require('../models/order');
+const Order = require('../models/order');
+
+// for pagination 
+const ITEMS_PER_PAGE = 1;
 
 exports.getProducts = (req, res, next) => {
-    // for get all products without repeat the product
+        // without pagination
+    // // for get all products without repeat the product
+    // Product.find()
+    //  .then((products) => {
+    //         res.render('shop/productList', {
+    //             prod: products,
+    //             pageTitle: 'All Product Items',
+    //             path: '/products',
+    //             // isAuthenticated: req.session.isLoggedIn
+    //     });
+    //     })
+    //     .catch(error => {
+    //         const erro = new Error(error);
+    //         error.httpStatusCode = 500;
+    //         return next(erro);
+    //     });
+    
+        // with pagination
+    const page = +req.query.page || 1;
+    let totalItems;
     Product.find()
-     .then((products) => {
-            res.render('shop/productList', {
+        .countDocuments()
+        .then(numProducts => {
+            totalItems = numProducts;
+            return  Product.find()
+        // for pagination skip and limit could be found in mongodb and mongoose
+                .skip((page - 1) * ITEMS_PER_PAGE)
+                .limit(ITEMS_PER_PAGE)
+                //
+        })
+        // 
+        .then(products => {
+             res.render('shop/productList', {
                 prod: products,
                 pageTitle: 'All Product Items',
                 path: '/products',
-                // isAuthenticated: req.session.isLoggedIn
-        });
+                
+                 // for pagination
+                 currentPage:page,
+                 hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+                 hasPreviousPage: page > 1,
+                 nextPage: page + 1,
+                 previousPage: page - 1,
+                 lastPage:Math.ceil(totalItems/ITEMS_PER_PAGE)
+                 //
+            });
         })
         .catch(error => {
             const erro = new Error(error);
@@ -46,16 +86,41 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
+    // for pagination
+    const page = +req.query.page || 1;
+    let totalItems;
     Product.find()
+        .countDocuments()
+        .then(numProducts => {
+            totalItems = numProducts;
+            return  Product.find()
+        // for pagination skip and limit could be found in mongodb and mongoose
+                .skip((page - 1) * ITEMS_PER_PAGE)
+                .limit(ITEMS_PER_PAGE)
+                //
+        })
+        // 
         .then(products => {
              res.render('shop/index', {
                 prod: products,
                 pageTitle: 'Shop',
                  path: '/',
-                // isAuthenticated: req.session.isLoggedIn
+                
+                 // for pagination
+                 currentPage:page,
+                 hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+                 hasPreviousPage: page > 1,
+                 nextPage: page + 1,
+                 previousPage: page - 1,
+                 lastPage:Math.ceil(totalItems/ITEMS_PER_PAGE)
+                 //
             });
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            const erro = new Error(error);
+            error.httpStatusCode = 500;
+            return next(erro);
+        });
 };
 
 exports.getCart = (req, res, next) => {
