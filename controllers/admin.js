@@ -58,6 +58,7 @@ exports.postAddProduct = (req, res, next) => {
     }
     // render path to database
     const imageUrl = image.path;
+
     // for database sequ...
     const product = new Product({
         title:title,
