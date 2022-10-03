@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const { validationResult } = require('express-validator');
 const Product = require('../models/product');
 
+// delete function path from util folder
+const fileHelper = require('../util/file');
+const { file } = require('pdfkit');
+
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/editProduct', {
         pageTitle: 'Add Product',
@@ -169,6 +173,9 @@ exports.postEditProduct = (req, res, next)=>{
             }
             productUpdate.title = updatedTitle;
             if (updatedImageUrl) {
+                // File Helper
+                fileHelper.deleteFile(productUpdate.imageUrl);
+                    //
                 productUpdate.imageUrl=updatedImageUrl.path;
             }
             
@@ -188,13 +195,23 @@ exports.postEditProduct = (req, res, next)=>{
         });
 };
 
+
+
 // delete the product
 exports.postDeleteProduct = (req, res, next) => {
     // productDeleteId from delete section in admin product.ejs 
     const prodDeleteId = req.body.productDeleteId;
-    // Product.findByIdAndRemove(prodDeleteId)
-    Product.deleteOne({ _id: prodDeleteId, userId: req.user._id })
-        .then(() => {
+    // for delete file saving path 
+    Product.findById(prodDeleteId)
+        .then(product => {
+            if (!product) {
+                return next(new Error('product not found'));
+            }
+            fileHelper.deleteFile(product.imageUrl);
+             // Product.findByIdAndRemove(prodDeleteId)
+            return Product.deleteOne({ _id: prodDeleteId, userId: req.user._id });
+        })
+         .then(() => {
             console.log('PRODUCT DELETED');
             res.redirect('/admin/products');
         })
@@ -203,4 +220,27 @@ exports.postDeleteProduct = (req, res, next) => {
             error.httpStatusCode = 500;
             return next(erro);
         });
+       
 };
+
+
+
+// // delete the product
+// exports.postDeleteProduct = (req, res, next) => {
+//     // productDeleteId from delete section in admin product.ejs 
+//     const prodDeleteId = req.body.productDeleteId;
+
+ 
+//         Product.deleteOne({ _id: prodDeleteId, userId: req.user._id })
+       
+//          .then(() => {
+//             console.log('PRODUCT DELETED');
+//             res.redirect('/admin/products');
+//         })
+//         .catch(error => {
+//             const erro = new Error(error);
+//             error.httpStatusCode = 500;
+//             return next(erro);
+//         });
+       
+// };

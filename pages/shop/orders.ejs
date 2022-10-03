@@ -11,7 +11,8 @@
                <li class="cart__item">
                  <div>
                    <h1>Order Number: <%= orderData._id %></h1>
-                  <h1>Ordered By: <%= orderData.user.name %></h1>
+                  <p>Ordered By: <%= orderData.user.email %></p>
+                  <p>Get Invoice:     <a href="/orders/<%=orderData._id %>">Invoice</a></p>
                  </div>
                   <ul class="cart__item-list">
                      <% orderData.products.forEach(item => { %>
@@ -19,7 +20,6 @@
                         <li class="cart__item_in">
                            <h1>Product: <%= item.title %></h1>
                            <h2>Quantity: <%= item.quantity %></h2>
-                           <a href="/orders/<%=orderData._id %>">Invoice</a>
                         </li>
                      <% }) %>
                   </ul>

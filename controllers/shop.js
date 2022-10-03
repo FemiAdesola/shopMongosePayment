@@ -206,7 +206,7 @@ exports.getInvoice = (req, res, next) => {
                 );
             });
             pdfDoc.fontSize(20).text('------------------------------------------');
-            pdfDoc.fontSize(20).text('Total proce: €' + totalPrice);
+            pdfDoc.fontSize(20).text('Total price: €' + totalPrice);
             pdfDoc.fontSize(20).text('------------------------------------------');
             pdfDoc.end();
             //
