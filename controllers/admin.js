@@ -7,6 +7,9 @@ const Product = require('../models/product');
 const fileHelper = require('../util/file');
 const { file } = require('pdfkit');
 
+// for pagination 
+const ITEMS_PER_PAGE = 2;
+
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/editProduct', {
         pageTitle: 'Add Product',
@@ -86,17 +89,53 @@ exports.postAddProduct = (req, res, next) => {
 
 // get the product
 exports.getProducts = (req, res, next) => {
-    Product.find({
-        // line below ( userId: req.user._id) restrict the amount of product we can see by each user
-        userId: req.user._id
-    })
-        .then((products) => {
-            console.log(products)
-            res.render('admin/products', {
+    // Product.find({
+    //     // line below ( userId: req.user._id) restrict the amount of product we can see by each user
+    //     userId: req.user._id
+    // })
+    //     .then((products) => {
+    //         console.log(products)
+    //         res.render('admin/products', {
+    //             prod: products,
+    //             pageTitle: 'Admin Products',
+    //             path: '/admin/products',
+    //             // isAuthenticated: req.session.isLoggedIn
+    //         });
+    //     })
+    //     .catch(error => {
+    //         const erro = new Error(error);
+    //         error.httpStatusCode = 500;
+    //         return next(erro);
+    //     });
+
+         // with pagination
+    const page = +req.query.page || 1;
+    let totalItems;
+    Product.find()
+        .countDocuments()
+        .then(numProducts => {
+            totalItems = numProducts;
+            return  Product.find()
+        // for pagination skip and limit could be found in mongodb and mongoose
+                .skip((page - 1) * ITEMS_PER_PAGE)
+                .limit(ITEMS_PER_PAGE)
+                //
+        })
+        // 
+        .then(products => {
+             res.render('admin/products', {
                 prod: products,
                 pageTitle: 'Admin Products',
                 path: '/admin/products',
-                // isAuthenticated: req.session.isLoggedIn
+                
+                 // for pagination
+                 currentPage:page,
+                 hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+                 hasPreviousPage: page > 1,
+                 nextPage: page + 1,
+                 previousPage: page - 1,
+                 lastPage:Math.ceil(totalItems/ITEMS_PER_PAGE)
+                 //
             });
         })
         .catch(error => {
