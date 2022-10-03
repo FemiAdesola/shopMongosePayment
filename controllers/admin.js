@@ -198,9 +198,10 @@ exports.postEditProduct = (req, res, next)=>{
 
 
 // delete the product
-exports.postDeleteProduct = (req, res, next) => {
-    // productDeleteId from delete section in admin product.ejs 
-    const prodDeleteId = req.body.productDeleteId;
+exports.deleteProduct = (req, res, next) => {
+    // // productDeleteId from delete section in admin product.ejs 
+    // const prodDeleteId = req.body.productDeleteId;
+    const prodDeleteId = req.params.productDeleteId;
     // for delete file saving path 
     Product.findById(prodDeleteId)
         .then(product => {
@@ -213,12 +214,14 @@ exports.postDeleteProduct = (req, res, next) => {
         })
          .then(() => {
             console.log('PRODUCT DELETED');
-            res.redirect('/admin/products');
+            // res.redirect('/admin/products');
+             res.status(200).json({message:'sucess!!!'});
         })
         .catch(error => {
-            const erro = new Error(error);
-            error.httpStatusCode = 500;
-            return next(erro);
+            // const erro = new Error(error);
+            // error.httpStatusCode = 500;
+            // return next(erro);
+            res.status(500).json({ message:'Delete product failed'})
         });
        
 };
