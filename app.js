@@ -6,9 +6,34 @@ const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const multer = require('multer');
 
 const csrf = require('csurf');
 const flash = require('connect-flash');
+
+// for file storage
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true)
+  } else{
+  
+    cb(null, false)
+  }
+}
+//
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -39,6 +64,9 @@ app.set('views', 'pages');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// for multer || the name image is comming from ejs file 
+app.use(multer({storage:fileStorage, fileFilter:fileFilter}).single('image'));
 
 // for cookies/ seesion
 app.use(session({

@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport(sendgridTransport({
 }))
 
 //  check validator
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 
 const User = require('../models/user');
 const { ValidationError } = require('sequelize');

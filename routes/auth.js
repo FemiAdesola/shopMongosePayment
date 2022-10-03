@@ -2,7 +2,7 @@
 
 const authController = require('../controllers/auth');
 // for validation 
-const { check, body } = require('express-validator/check');
+const { check, body } = require('express-validator');
 
 // user
 const User = require('../models/user');

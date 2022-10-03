@@ -1,6 +1,6 @@
 'use strict';
 const mongoose = require('mongoose');
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
@@ -16,16 +16,34 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
    const title = req.body.title;
-    const imageUrl = req.body.imageUrl;
+    const image = req.file;
     const price = req.body.price;
     const description = req.body.description;
+  
+    // setup image
+    if (!image) {
+        return res.status(422).render('admin/editProduct', {
+            pageTitle: 'Add Product',
+            path: '/admin/add-product',
+            editing: false,
+            hasError:true,
+            product: {
+                title:title,
+                price:price,
+                description: description,
+            },
+            errorMessage: 'Attached file is not an image',
+            validationErrors:[]
+        }); 
+    }
+
 
 // erroe validation
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).render('admin/editProduct', {
             pageTitle: 'Add Product',
-            path: '/admin/edit-product',
+            path: '/admin/add-product',
             editing: false,
             hasError:true,
             product: {
@@ -38,6 +56,8 @@ exports.postAddProduct = (req, res, next) => {
             validationErrors:errors.array()
         }); 
     }
+    // render path to database
+    const imageUrl = image.path;
     // for database sequ...
     const product = new Product({
         title:title,
@@ -116,7 +136,7 @@ exports.getEditProduct = (req, res, next) => {
 exports.postEditProduct = (req, res, next)=>{
     const prodId = req.body.productID;
     const updatedTitle = req.body.title;
-    const updatedImageUrl = req.body.imageUrl;
+    const updatedImageUrl = req.file;
     const updatedPrice = req.body.price;
     const updatedDescription = req.body.description;
     
@@ -131,7 +151,6 @@ exports.postEditProduct = (req, res, next)=>{
             hasError:true,
             product: {
                 title:updatedTitle,
-                imageUrl:updatedImageUrl,
                 price:updatedPrice,
                 description: updatedDescription,
                 _id:prodId
@@ -148,7 +167,10 @@ exports.postEditProduct = (req, res, next)=>{
                 return res.redirect('/');
             }
             productUpdate.title = updatedTitle;
-            productUpdate.imageUrl=updatedImageUrl;
+            if (updatedImageUrl) {
+                productUpdate.imageUrl=updatedImageUrl.path;
+            }
+            
             productUpdate.price = updatedPrice;
             productUpdate.description = updatedDescription;
             return productUpdate
