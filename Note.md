@@ -18,3 +18,7 @@ https://github.com/validatorjs/validator.js
 
 - package to store filepath
 npm install --save multer
+
+
+- pdfkit
+https://pdfkit.org/ 
