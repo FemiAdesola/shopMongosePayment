@@ -20,5 +20,4 @@ const deleteProduct = (btn) => {
         .catch(error => {
             console.log(error)
         });
-    
 };

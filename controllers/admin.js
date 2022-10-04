@@ -89,25 +89,6 @@ exports.postAddProduct = (req, res, next) => {
 
 // get the product
 exports.getProducts = (req, res, next) => {
-    // Product.find({
-    //     // line below ( userId: req.user._id) restrict the amount of product we can see by each user
-    //     userId: req.user._id
-    // })
-    //     .then((products) => {
-    //         console.log(products)
-    //         res.render('admin/products', {
-    //             prod: products,
-    //             pageTitle: 'Admin Products',
-    //             path: '/admin/products',
-    //             // isAuthenticated: req.session.isLoggedIn
-    //         });
-    //     })
-    //     .catch(error => {
-    //         const erro = new Error(error);
-    //         error.httpStatusCode = 500;
-    //         return next(erro);
-    //     });
-
          // with pagination
     const page = +req.query.page || 1;
     let totalItems;
@@ -238,51 +219,21 @@ exports.postEditProduct = (req, res, next)=>{
 
 // delete the product
 exports.deleteProduct = (req, res, next) => {
-    // // productDeleteId from delete section in admin product.ejs 
-    // const prodDeleteId = req.body.productDeleteId;
     const prodDeleteId = req.params.productDeleteId;
-    // for delete file saving path 
     Product.findById(prodDeleteId)
         .then(product => {
             if (!product) {
                 return next(new Error('product not found'));
             }
             fileHelper.deleteFile(product.imageUrl);
-             // Product.findByIdAndRemove(prodDeleteId)
             return Product.deleteOne({ _id: prodDeleteId, userId: req.user._id });
         })
          .then(() => {
             console.log('PRODUCT DELETED');
-            // res.redirect('/admin/products');
              res.status(200).json({message:'sucess!!!'});
         })
         .catch(error => {
-            // const erro = new Error(error);
-            // error.httpStatusCode = 500;
-            // return next(erro);
             res.status(500).json({ message:'Delete product failed'})
         });
        
 };
-
-
-
-// // delete the product
-// exports.postDeleteProduct = (req, res, next) => {
-//     // productDeleteId from delete section in admin product.ejs 
-//     const prodDeleteId = req.body.productDeleteId;
-
- 
-//         Product.deleteOne({ _id: prodDeleteId, userId: req.user._id })
-       
-//          .then(() => {
-//             console.log('PRODUCT DELETED');
-//             res.redirect('/admin/products');
-//         })
-//         .catch(error => {
-//             const erro = new Error(error);
-//             error.httpStatusCode = 500;
-//             return next(erro);
-//         });
-       
-// };

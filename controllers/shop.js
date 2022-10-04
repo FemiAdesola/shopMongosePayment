@@ -12,23 +12,6 @@ const Order = require('../models/order');
 const ITEMS_PER_PAGE = 1;
 
 exports.getProducts = (req, res, next) => {
-        // without pagination
-    // // for get all products without repeat the product
-    // Product.find()
-    //  .then((products) => {
-    //         res.render('shop/productList', {
-    //             prod: products,
-    //             pageTitle: 'All Product Items',
-    //             path: '/products',
-    //             // isAuthenticated: req.session.isLoggedIn
-    //     });
-    //     })
-    //     .catch(error => {
-    //         const erro = new Error(error);
-    //         error.httpStatusCode = 500;
-    //         return next(erro);
-    //     });
-    
         // with pagination
     const page = +req.query.page || 1;
     let totalItems;
@@ -75,7 +58,6 @@ exports.getProduct = (req, res, next) => {
                 product: productD,
                 pageTitle: productD.title,
                 path: '/products',
-                // isAuthenticated: req.session.isLoggedIn
             });
         })
         .catch(error => {
@@ -274,29 +256,7 @@ exports.getInvoice = (req, res, next) => {
             pdfDoc.fontSize(20).text('Total price: €' + totalPrice);
             pdfDoc.fontSize(20).text('------------------------------------------');
             pdfDoc.end();
-            //
-
-            //
-            // fs.readFile(invoicePath, (error, data) => {
-            //     if (error) {
-            //     return next(error);
-            //     }
-            //     res.setHeader('Content-Type', 'application/pdf');
-            //     res.setHeader(
-            //     'Content-Disposition',
-            //     'inline; filename="' + invoiceName + '"'
-            //     );
-            //     res.send(data);
-            // });
-            
-            // // for streaming file
-            // const file = fs.createReadStream(invoicePath);
-            // res.setHeader('Content-Type', 'application/pdf');
-            // res.setHeader(
-            //     'Content-Disposition',
-            //     'inline; filename="' + invoiceName + '"'
-            // );
-            // file.pipe(res);
+           
             })
         .catch(error => next(error));
 }
@@ -309,5 +269,4 @@ exports.getInvoice = (req, res, next) => {
 //         // isAuthenticated: req.session.isLoggedIn
 //     });
 // };
-
 
