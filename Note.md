@@ -22,3 +22,9 @@ npm install --save multer
 
 - pdfkit
 https://pdfkit.org/ 
+
+stripe
+https://stripe.com/en-gb-fi
+https://stripe.com/docs/libraries/stripejs-esmodule
+https://dashboard.stripe.com/test/dashboard 
+
