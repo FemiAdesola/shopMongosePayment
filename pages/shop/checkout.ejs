@@ -1,0 +1,19 @@
+<%- include('../includes/header.ejs') %>
+</head>
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <main>
+        <ul class="cart__item-list">
+            <% products.forEach(cartData => { %>
+                <li class="cart__item">
+                    <h1><%= cartData.productId.title %></h1>
+                    <h2>Quantity: <%= cartData.quantity %></h2>
+                </li>
+            <% }) %>
+        </ul>
+        <div class="centered">
+            <h2>Total: <%= totalSum %></h2>
+        </div>
+    </main>
+    <%- include('../includes/body.ejs') %>
+    

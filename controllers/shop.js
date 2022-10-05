@@ -262,11 +262,30 @@ exports.getInvoice = (req, res, next) => {
 }
 
 
-// exports.getCheckout = (req, res, next) => {
-//     res.render('shop/checkout', {
-//         path: '/checkout',
-//         pageTitle: 'Checkout',
-//         // isAuthenticated: req.session.isLoggedIn
-//     });
-// };
+exports.getCheckout = (req, res, next) => {
+
+    // console.log(req.user.cart)
+    req.user
+        .populate('cart.items.productId')
+        .then(userCheckoutProducts => {
+            const productsByUser = userCheckoutProducts.cart.items;
+            let total=0;
+            productsByUser.forEach(p=>{
+                total += p.quantity * p.productId.price
+            })
+            res.render('shop/checkout', {
+                path: '/checkout',
+                pageTitle: 'Checkout',
+                products: productsByUser,
+                totalSum: total
+                
+            });
+        })
+        .catch(error => {
+            const erro = new Error(error);
+            error.httpStatusCode = 500;
+            return next(erro);
+        }); 
+    
+};
 

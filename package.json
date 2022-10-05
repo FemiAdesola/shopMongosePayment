@@ -1,5 +1,5 @@
 {
-  "name": "expressjsmongoose",
+  "name": "expressjsmonpayment",
   "version": "1.0.0",
   "description": "express js with node js",
   "main": "app.js",
