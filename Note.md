@@ -22,7 +22,8 @@ npm install --save multer
 - helmet safety 
 https://helmetjs.github.io/
 
-
+- for adding compression to the application 
+https://github.com/expressjs/compression
 
 
 

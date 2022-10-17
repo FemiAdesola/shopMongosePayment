@@ -11,8 +11,9 @@ const multer = require('multer');
 const csrf = require('csurf');
 const flash = require('connect-flash');
 
-// Helmet
-const helmet = require("helmet");
+// Helmet and compresssion
+const helmet = require('helmet');
+const compression = require('compression');
 
 // for file storage
 const fileStorage = multer.diskStorage({
@@ -72,8 +73,9 @@ app.set('views', 'pages');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Helmet
+// Helmet and Compression
 app.use(helmet());
+app.use(compression());
 
 // for serving inage statically 
 app.use('/images', express.static(path.join(__dirname, 'images')));
