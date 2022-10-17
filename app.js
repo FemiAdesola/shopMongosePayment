@@ -11,6 +11,9 @@ const multer = require('multer');
 const csrf = require('csurf');
 const flash = require('connect-flash');
 
+// Helmet
+const helmet = require("helmet");
+
 // for file storage
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -53,6 +56,7 @@ const { Error } = require('sequelize');
 // from express
 const app = express();
 
+
 // for cookies/ seesion
 const store = new MongoDBStore({
     uri: MONGODB_URL,
@@ -67,6 +71,9 @@ app.set('views', 'pages');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Helmet
+app.use(helmet());
 
 // for serving inage statically 
 app.use('/images', express.static(path.join(__dirname, 'images')));
