@@ -40,8 +40,11 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 const errorController = require('./controllers/error');
 
+
+// console.log(process.env.NODE_ENV)
+
 // for database
-const MONGODB_URL = 'mongodb+srv://Femi:CwRbXZuHSUaMW9yH@shop.fftoabl.mongodb.net/shop';
+const MONGODB_URL = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@shop.fftoabl.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
 
 // User
 const User = require('./models/user');
@@ -130,7 +133,7 @@ app.use((error, req, res, next) => {
 // server connection with mongoose 
 mongoose.connect(MONGODB_URL)
     .then(result => {
-        app.listen(3000)
+        app.listen(process.env.PORT || 3000)
     })
     .catch(error => {
         console.log(error)

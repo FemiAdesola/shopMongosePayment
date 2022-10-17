@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 const PDFDocument = require('pdfkit');
 
