@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -14,6 +15,7 @@ const flash = require('connect-flash');
 // Helmet and compresssion
 const helmet = require('helmet');
 const compression = require('compression');
+const morgan = require('morgan'); 
 
 // for file storage
 const fileStorage = multer.diskStorage({
@@ -73,9 +75,17 @@ app.set('views', 'pages');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Helmet and Compression
+
+// for morgan
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'),
+  { flags: 'a' }
+);
+//
+// Helmet, Compression, morgan
 app.use(helmet());
 app.use(compression());
+app.use(morgan('combined', {stream:accessLogStream})); 
 
 // for serving inage statically 
 app.use('/images', express.static(path.join(__dirname, 'images')));
