@@ -263,43 +263,22 @@ exports.getInvoice = (req, res, next) => {
 
 
 exports.getCheckout = (req, res, next) => {
-    //  for stripe 
-    let productsByUser;
-    let total=0;
-    // console.log(req.user.cart)
     req.user
         .populate('cart.items.productId')
         .then(userCheckoutProducts => {
-            productsByUser = userCheckoutProducts.cart.items;
-            total=0;
+            const productsByUser = userCheckoutProducts.cart.items;
+            let total=0;
             productsByUser.forEach(p => {
                 total += p.quantity * p.productId.price
             });
-            // stripe
-            return stripe.checkout.sessions.create({
-                payment_method_types: ['card'],
-                line_items: productsByUser.map(p => {
-                    return {
-                        name: p.productId.title,
-                        description: p.productId.description,
-                        amount: p.productId.price * 100,
-                        currency: 'usd',
-                        quantity: p.quantity
-                    };
-                }),
-                success_url:req.protocol + '://' + req.get('host') + '/checkout/success', // => http://localhost3000/checkout/success
-                cancel_url:req.protocol + '://' + req.get('host') + '/checkout/cancel',
-            });
-            //
-        })
-        .then(session => {
+            
             res.render('shop/checkout', {
                 path: '/checkout',
                 pageTitle: 'Checkout',
                 products: productsByUser,
                 totalSum: total,
-                // stripe
-                sessionId:session.id
+                // // stripe
+                // sessionId:session.id
             });
         })
         
