@@ -159,7 +159,7 @@ exports.getEditProduct = (req, res, next) => {
 
 // edit post product 
 exports.postEditProduct = (req, res, next)=>{
-    const prodId = req.body.productID;
+    const prodId = req.body.productId;
     const updatedTitle = req.body.title;
     const updatedImageUrl = req.file;
     const updatedPrice = req.body.price;
@@ -219,7 +219,7 @@ exports.postEditProduct = (req, res, next)=>{
 
 // delete the product
 exports.deleteProduct = (req, res, next) => {
-    const prodDeleteId = req.params.productDeleteId;
+    const prodDeleteId = req.params.productId;
     Product.findById(prodDeleteId)
         .then(product => {
             if (!product) {

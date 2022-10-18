@@ -145,7 +145,7 @@ exports.postCart = (req, res, next) => {
 };
 
 exports.postCartDeleteProduct = (req, res, next) => {
-    const prodId = req.body.productCartId;
+    const prodId = req.body.productId;
     req.user
         .deleteItemFromCart(prodId)
         .then(result => {
@@ -242,14 +242,14 @@ exports.getInvoice = (req, res, next) => {
             let totalPrice = 0;
             order.products.forEach(prod => {
                 // totalPrice = totalPrice + prod.quantity * prod.productData.price;
-                totalPrice += prod.quantity * prod.productData.price;
+                totalPrice += prod.quantity * prod.product.price;
                 pdfDoc.fontSize(15).
                     text(
-                    prod.productData.title +
+                    prod.product.title +
                     ' - ' +
                     prod.quantity +
                     ' * ' + '€' +
-                    prod.productData.price
+                    prod.product.price
                 );
             });
             pdfDoc.fontSize(20).text('------------------------------------------');
@@ -321,7 +321,7 @@ exports.getCheckoutSuccess = (req, res, next) => {
                 .map(i => {
                     return {
                         quantity: i.quantity,
-                        productData: {...i.productId._doc}
+                        product: {...i.productId._doc}
                     }
                 });
             const order = new Order({
