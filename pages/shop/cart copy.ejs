@@ -10,7 +10,7 @@
                         <h1><%= cartData.productId.title %></h1>
                         <h2>Quantity: <%= cartData.quantity %></h2>
                         <form action="/cart-delete-item" method="POST">
-                            <input type="hidden" value="<%= cartData.productId._id %>" name="productId">
+                            <input type="hidden" value="<%= cartData.productId._id %>" name="productCartId">
                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <button class="btn" type="submit">Delete</button>
                         </form>
