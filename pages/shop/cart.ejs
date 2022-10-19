@@ -3,6 +3,7 @@
 <body>
     <%- include('../includes/nav.ejs') %>
     <main>
+         <div>
         <% if (products.length > 0) { %>
             <ul class="cart__item-list">
                 <% products.forEach(cartData => { %>
@@ -17,6 +18,7 @@
                     </li>
                 <% }) %>
             </ul>
+            </div>
             <hr>
             <div class="centered">
                 <!-- <form action="/create-order" method="POST">

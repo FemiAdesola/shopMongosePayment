@@ -11,8 +11,11 @@ body{
 }
 
 main {
-  padding: 1rem;
+  padding: 10px;
   margin: auto;
+  position: relative;
+  min-height: 53vh;
+  padding-bottom: 20px; 
 }
 
 form {
@@ -24,7 +27,7 @@ form {
 }
 
 .image{
-  height: 20rem;
+  height: 200px;
 }
 .image img{
   height: 100%;
@@ -101,6 +104,7 @@ form {
   font: inherit;
   border-radius: 5px;
 }
+
 
 .form-control input{
 height: 40px;
@@ -304,6 +308,30 @@ border-radius: 5px;
   .user-message{
     width: 30rem;
   }
+  input,
+    textarea,
+    label {
+      width: 100%;
+    }
+    .form-group {
+      padding: 0.5rem;
+    }
+    label {
+      margin-bottom: 0.5rem;
+    }
+
+    footer .icons i {
+      display: inline-flex;
+      justify-items: center;
+      align-items: center;
+      color:var(--color-3);
+      padding-left: 30px;
+      
+    }
+    footer .icons i:hover{
+      color: var(--bg-color-2);
+      transition: 2s;
+    }
 }
 
 
@@ -407,4 +435,40 @@ border-radius: 5px;
 .pagination a.active{
   background:#3b3b38;
   color: yellow;
+}
+
+
+/* --------- Footer ------------------------*/
+
+
+footer {
+  background-color: gray;
+  font-size: 20px;
+  padding-top:40px;
+  text-align: center;
+  position: relative;
+}
+
+.wrapper{
+  position:absolute;
+  width:100%;
+}
+
+
+footer p{
+    font-size: 12px;
+}
+
+footer .icons i {
+  margin: 20px ;
+  color:yellow;
+  font-size: 30px;
+  text-decoration: none;
+}
+footer .icons i:hover{
+  color: blue;
+  transition: 2s;
+}
+footer a{
+  text-decoration: none;
 }
