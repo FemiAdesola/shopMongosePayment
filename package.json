@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "express js with node js",
   "main": "app.js",
+  "engines":{
+    "node": "16.13.2",
+    "npm":"8.1.2"
+  },
+ 
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=production MONGO_USER=Femi MONGO_PASSWORD=CwRbXZuHSUaMW9yH MONGO_DEFAULT_DATABASE=shop STRIPE_KEY=sk_test_51LpRyfIjK6CkHq85AK02ht3LuB36bRq4kzTj1JAgINnGelDYZTfbpXEkNIi3GxcM9A8ycriKZnHBuNBZic1iDngN00qM6iA7l4 node app.js",
@@ -28,6 +33,7 @@
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "helmet": "^6.0.0",
+    "heroku": "^7.65.0",
     "mongodb": "^4.9.1",
     "mongoose": "^6.6.1",
     "morgan": "^1.10.0",

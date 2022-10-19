@@ -1,2 +1,5 @@
 /node_modules
-.Note
+server.cert
+server.key
+Note.md 
+access.log
