@@ -17,6 +17,13 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan'); 
 
+// for ssl server
+const https = require('https');
+const privateKey = fs.readFileSync('server.key');
+const certificate = fs.readFileSync('server.cert');
+
+//
+
 // for file storage
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -152,8 +159,13 @@ app.use((error, req, res, next) => {
 // server connection with mongoose 
 mongoose.connect(MONGODB_URL)
     .then(result => {
-        app.listen(process.env.PORT || 3000)
+      // app.listen(process.env.PORT || 3000)
+      https.createServer({
+        key: privateKey, cert: certificate
+      }, app).listen(process.env.PORT || 3000)
     })
     .catch(error => {
         console.log(error)
     });
+
+    

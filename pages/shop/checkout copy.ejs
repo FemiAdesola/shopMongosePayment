@@ -31,3 +31,15 @@
     </main>
     <%- include('../includes/body.ejs') %>
     
+    <form action="/create-order" method="POST">
+                <script
+                      src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-key="pk_test_51LpRyfIjK6CkHq85Z67DYYdabdCgAuF8gDY2DIIslA7qvEus27tCkIdB138y9WBKChfA5EApB4FOO8liykNKAzRf00P1uOyVoq"
+                      data-amount="<%= totalSum * 100 %>"
+                      data-name="Your Order"
+                      data-description="All the items you ordewred"
+                      data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                      data-locale="auto"
+                      data-currency="usd">
+                </script>
+            </form>

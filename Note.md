@@ -37,7 +37,16 @@ https://stripe.com/docs/libraries/stripejs-esmodule
 https://dashboard.stripe.com/test/dashboard 
 
 
+- morgan
 npm install --save morgan
 
  "start": "NODE_ENV=production MONGO_USER=Femi MONGO_PASSWORD=CwRbXZuHSUaMW9yH MONGO_DEFAULT_DATABASE=shop STRIPE_KEY=ssk_test_51LpRyfIjK6CkHq85AK02ht3LuB36bRq4kzTj1JAgINnGelDYZTfbpXEkNIi3GxcM9A8ycriKZnHBuNBZic1iDngN00qM6iA7l4 node app.js",
+
+- open ssl
+https://www.openssl.org/
+
+https://github.com/openssl/openssl 
+
+
+openssl req -nodes -new -x509 -keyout server.key -out server.cert
 
